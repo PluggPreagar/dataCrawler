@@ -4,6 +4,7 @@ import org.ppp.Session;
 import org.ppp.Util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,6 +13,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class CsvHandler extends Handler{
+
+    public CsvHandler() {
+        super( CsvHandler.class);
+    }
 
     static class Setting {
         String delimiter = ",";
@@ -35,6 +40,7 @@ public class CsvHandler extends Handler{
 
     @Override
     public List<List<String>> load(String query, Session session) {
+
         List<List<String>> cells = super.load(query, session);
         URI filePath = null;
         try {
@@ -51,7 +57,6 @@ public class CsvHandler extends Handler{
             }
         } catch (URISyntaxException e) {
             session.error(e);
-            throw new RuntimeException(e);
         } catch (IOException e) {
             session.warn(e);
         }
@@ -60,7 +65,31 @@ public class CsvHandler extends Handler{
     }
 
     @Override
-    public void save(List<List<String>> cells, Session session) {
-        super.save(cells, session);
+    public void save(List<List<String>> cells, String query, Session session) {
+
+        super.save(cells, query, session);
     }
+
+    public void save(List<List<String>> cells, String query, Session session, Setting setting) {
+
+        String filePath = query;
+        try(BufferedWriter bw = Files.newBufferedWriter(Paths.get(filePath))) {
+
+            for (List<String> row : cells) {
+                for (String cell : row) {
+                    cell = Util.quote(cell, setting.quotes, setting.delimiter);
+                    bw.append( cell );
+                    bw.append( setting.delimiter );
+                }
+                bw.append(System.lineSeparator());
+            }
+
+        } catch (IOException e) {
+            session.error(e);
+        }
+
+        super.save(cells, query, session);
+    }
+
+
 }

@@ -86,6 +86,16 @@ public class Util {
         return strings;
     }
 
+    static public String quote(String line, String delimiter, String quote) {
+        if (line.contains(quote)) {
+            line = quote + line.replace(quote, "\\"+quote) + quote;
+        } else if (line.contains(delimiter) ) {
+            line = quote + line + quote;
+        }
+        return line;
+    }
+
+
     static public String optionalOnEmpty(String val, String fallback) {
         return null != val && !val.isEmpty() ? val : fallback;
     }

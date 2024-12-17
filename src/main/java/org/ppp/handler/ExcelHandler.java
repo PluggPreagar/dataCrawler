@@ -12,17 +12,24 @@ import java.util.List;
 public class ExcelHandler extends Handler {
 
 
+    public ExcelHandler() {
+        super( ExcelHandler.class);
+    }
+
     @Override
-    public List<List<String>> load(String filePath, Session session) {
+    public List<List<String>> load(String query, Session session) {
+
+        String filePath = query;
         List<List<String>> cells = new ArrayList<>();
         try {
             FileInputStream fis = new FileInputStream(filePath);
             Workbook workbook = WorkbookFactory.create(fis);
 
             Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
+            List<String> rowCells = new ArrayList<>();
             for (Row row : sheet) {
-                List<String> rowCells = new ArrayList<>();
-                rowCells.add( filePath.replaceAll(".*[\\\\/]",""));
+                rowCells.clear();
+                rowCells.add( filePath.replaceAll(".*[\\\\/]","")); // inject file name to first column
                 for (Cell cell : row) {
                     switch (cell.getCellType()) {
                         case STRING:
@@ -42,14 +49,12 @@ public class ExcelHandler extends Handler {
                     }
                 }
                 cells.add( rowCells);
-                System.out.println( String.join(";", rowCells) );
+                logFirst(filePath, String.join(";", rowCells) );
             }
 
             fis.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            session.error(e);
         }
 
         return cells;

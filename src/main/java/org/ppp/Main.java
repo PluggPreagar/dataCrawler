@@ -19,7 +19,7 @@ public class Main {
         for (File listFile : file.listFiles()) {
 
             if (listFile.getAbsolutePath().endsWith(".xlsx")){
-                System.out.println(listFile.getAbsolutePath());
+                System.out.println("read xls-file: " + listFile.getAbsolutePath());
                 List<List<String>> cellsCurrent = excelReader.load(listFile.getAbsolutePath(), session);
                 cells.addAll(cellsCurrent);
             }
