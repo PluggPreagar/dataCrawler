@@ -19,6 +19,7 @@ public class UrlHttps extends Handler{
     public void save(List<List<String>> cells, String query, Session session) {
         super.save(cells, query, session);
 
+
     }
 
 }
