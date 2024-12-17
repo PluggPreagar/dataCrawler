@@ -16,7 +16,7 @@ public class Handler {
         return new ArrayList<>();
     }
 
-    public void save(List<List<String>> cells, Session session) {
+    public void save(List<List<String>> cells, String query, Session session) {
     }
 
 
