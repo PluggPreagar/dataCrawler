@@ -15,6 +15,11 @@ dependencies {
 
     implementation("org.apache.poi:poi:4.1.2")
     implementation("org.apache.poi:poi-ooxml:4.1.2")
+    implementation("com.google.code.gson:gson:2.8.9")
+
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
 }
 

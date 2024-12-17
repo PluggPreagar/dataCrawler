@@ -1,6 +1,11 @@
 package org.ppp;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.ppp.handler.ExcelHandler;
+import org.ppp.handler.HttpReader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +31,20 @@ public class Main {
 
         }
 
+        List<List<String>> load = new HttpReader().load("https://meine-rehabilitation.de/pr-backend/details?id_fach=679031002", session);
+        System.out.printf(load.toString());
+        String jsnString = load.toString();
+        // convert to json
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonElement jsonElement = JsonParser.parseString(jsnString);
+        // pretty print using gson
+        String json = gson.toJson(jsonElement);
+        System.out.println(json);
+        // find email from json
+        String email =  UtilJson.find(jsonElement, "email");
+        System.out.println("email: " + email);
 
     }
+
 }
